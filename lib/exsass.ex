@@ -1,0 +1,2 @@
+defmodule Sass do
+end
