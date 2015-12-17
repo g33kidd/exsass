@@ -1,3 +1,5 @@
+Code.require_file "lib/mix/tasks/compile.sass.ex"
+
 defmodule Sass.Mixfile do
   use Mix.Project
 
@@ -5,6 +7,7 @@ defmodule Sass.Mixfile do
     [app: :exsass,
      version: "0.0.1",
      elixir: "~> 1.1",
+     compilers: [:sass, :elixir, :app],
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
@@ -15,6 +18,10 @@ defmodule Sass.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     [applications: [:logger]]
+  end
+
+  defp package do
+    []
   end
 
   # Dependencies can be Hex packages:
