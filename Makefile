@@ -1,11 +1,12 @@
 MIX = mix
-CFLAGS_SASS=-g -fPIC -O3
+CFLAGS_SASS=-g -fPIC -O3 -Wall
 ERLANG_PATH = $(shell erl -eval 'io:format("~s", [lists:concat([code:root_dir(), "/erts-", erlang:system_info(version), "/include"])])' -s init stop -noshell)
 ERLANG_FLAGS=-I$(ERLANG_PATH)
 CFLAGS += -I$(ERLANG_PATH)
 LIBSASS_PATH = libsass_src/
 CFLAGS += $(CFLAGS_SASS)
-# CFLAGS += -I$(LIBSASS_PATH)include/
+CFLAGS += -I$(LIBSASS_PATH)include/
+
 CC?=clang
 SASS_SRC = libsass_src/src
 
@@ -79,3 +80,6 @@ priv/sass.so: ${SASS_LIB} ${NIF_SRC}
 	$(SASS_OBJS) \
 	$(NIF_SRC) \
 	-o $@ 2>&1 >/dev/null
+
+clean:
+	rm -rf priv/sass.*

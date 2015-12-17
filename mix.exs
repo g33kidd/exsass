@@ -20,10 +20,6 @@ defmodule Sass.Mixfile do
     [applications: [:logger]]
   end
 
-  defp package do
-    []
-  end
-
   # Dependencies can be Hex packages:
   #
   #   {:mydep, "~> 0.3.0"}
