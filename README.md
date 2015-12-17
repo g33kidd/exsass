@@ -1,6 +1,6 @@
 # Sass
 
-**TODO: Add description**
+Currently the Makefile is not working. If it were, I'm sure this would work fine.
 
 ## Installation
 
