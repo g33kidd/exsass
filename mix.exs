@@ -30,6 +30,6 @@ defmodule Sass.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    []
+    [{:libsass, github: "sass/libsass", app: false}]
   end
 end
