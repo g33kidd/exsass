@@ -1,12 +1,14 @@
+CC = gcc
 MIX = mix
-CFLAGS = -g -fPIC -O3 -Wall
+CFLAGS = -Wall -O2 -fPIC -Wl,-undefined,error
 
 ERLANG_PATH = $(shell erl -eval 'io:format("~s", [lists:concat([code:root_dir(), "/erts-", erlang:system_info(version), "/include"])])' -s init stop -noshell)
 CFLAGS += -I$(ERLANG_PATH)
 
 LIBSASS_PATH = deps/libsass
+LIBSASS_SRC = $(LIBSASS_PATH)/src
 LIBSASS_STATIC = $(LIBSASS_PATH)/lib/libsass.a
-CFLAGS += -I$(LIBSASS_PATH)/include/
+CFLAGS += -I$(LIBSASS_PATH)/include
 
 NIF_SRC = src/sass_nif.c
 
@@ -19,11 +21,13 @@ all: sass
 sass:
 	$(MIX) compile
 
-priv/sass.so:
-	$(MAKE) -C $(LIBSASS_PATH) -j5 && \
-	$(CC) $(CFLAGS) -shared $(OPTIONS) -o $@ $(NIF_SRC) $(LIBSASS_STATIC)
+priv/sass.so: $(NIF_SRC)
+	$(MAKE) BUILD="static" -C $(LIBSASS_PATH) && \
+	$(CC) $(CFLAGS) $(OPTIONS) -shared -o $@ $(NIF_SRC) $(LIBSASS_STATIC) -lstdc++
 
 clean:
+	$(MIX) clean
+	#$(MAKE) -C $(LIBSASS_PATH) clean
 	rm -rf priv/sass.*
 
 .PHONY: all sass clean
