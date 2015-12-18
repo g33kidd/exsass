@@ -1,7 +1,7 @@
 /_build
 /cover
 /deps
-/priv
+/priv/*
 !/priv/.gitkeep
 erl_crash.dump
 *.ez
