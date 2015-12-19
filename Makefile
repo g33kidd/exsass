@@ -1,6 +1,6 @@
 CC = gcc
 MIX = mix
-CFLAGS = -Wall -O2 -fPIC -Wl,-undefined,error
+CFLAGS = -Wall -O2 -fPIC
 
 ERLANG_PATH = $(shell erl -eval 'io:format("~s", [lists:concat([code:root_dir(), "/erts-", erlang:system_info(version), "/include"])])' -s init stop -noshell)
 CFLAGS += -I$(ERLANG_PATH)

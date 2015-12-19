@@ -21,8 +21,6 @@ sass_compile_nif(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
     return argv[0];
   }
 
-  //printf((char *) input_binary.data);
-
   struct Sass_Data_Context* data_ctx = sass_make_data_context((char *) input_binary.data);
   struct Sass_Compiler* compiler = sass_make_data_compiler(data_ctx);
 
@@ -31,17 +29,12 @@ sass_compile_nif(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
 
   char *compiled_sass = sass_context_get_output_string(data_ctx);
   if(!enif_alloc_binary(sizeof(compiled_sass), &output_binary))
-    return enif_make_badarg(env);
-
-  sass_delete_compiler(compiler);
-  sass_delete_data_context(data_ctx);
+     return enif_make_badarg(env);
+  //
+  // sass_delete_compiler(compiler);
+  // sass_delete_data_context(data_ctx);
 
   return enif_make_binary(env, &output_binary);
-
-  // Create the context and set it's options
-  ///////////////////////////////////// THIS LINE OF CODE IS CAUSING AN UNDEFINED SYMBOL
-  // // Create the compiler and compile.
-
 }
 
 static int
