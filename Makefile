@@ -75,11 +75,11 @@ $(SASS_LIB):
 	git submodule update --init && \
 	CFLAGS="-j5" $(MAKE) 2>&1 >/dev/null
 
-priv/sass.so: ${SASS_LIB} ${NIF_SRC}
-	$(CC) $(CFLAGS) $(ERLANG_FLAGS) -shared $(OPTIONS) \
+priv/sass.so: ${SASfS_LIB} ${NIF_SRC}
+	$(CC) $(CFLAGS) -shared $(OPTIONS) \
 	$(SASS_OBJS) \
 	$(NIF_SRC) \
-	-o $@ 2>&1 >/dev/null
+	-o $@ -lstdc++ 2>&1 >/dev/null
 
 clean:
 	rm -rf priv/sass.*
