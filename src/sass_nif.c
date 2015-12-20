@@ -32,6 +32,8 @@ make_response_tuple(ErlNifEnv* env, const char* atom_string, const char* msg)
 static ERL_NIF_TERM
 sass_compile_nif(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   ErlNifBinary input;
+  char* response;
+  char* atom_response;
 
   if (argc != 1) {
     return enif_make_badarg(env);
@@ -49,23 +51,30 @@ sass_compile_nif(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   struct Sass_Compiler* compiler = sass_make_data_compiler(data_ctx);
 
   // SASS OPTIONS
-  // struct Sass_Options* options = sass_data_context_get_options(data_ctx);
-  // sass_option_set_precision(options, 1);
-  // sass_option_set_source_comments(options, true);
+  struct Sass_Options* options = sass_data_context_get_options(data_ctx);
+  sass_option_set_precision(options, 1);
+  sass_option_set_source_comments(options, true);
+  sass_option_set_is_indented_syntax_src(options, false);
+  // sass_option_set_source_comments(options, false);
+  // sass_data_context_set_options(data_ctx, options);
 
   sass_compiler_parse(compiler);
   sass_compiler_execute(compiler);
 
   char *compiled_sass = sass_context_get_output_string(data_ctx);
 
+  if (sass_context_get_error_status(data_ctx) != 0) {
+    response = sass_context_get_error_text(data_ctx);
+    atom_response = "ok";
+  } else {
+    response = (char *) compiled_sass;
+    atom_response = (char *) "ok";
+  }
+  
   // sass_delete_compiler(compiler);
   // sass_delete_data_context(data_ctx);
 
-  if (sass_context_get_error_status(data_ctx) != 0) {
-    return make_response_tuple(env, "nok", sass_context_get_error_text(data_ctx));
-  }
-
-  return make_response_tuple(env, "ok", compiled_sass);
+  return make_response_tuple(env, atom_response, response);
 }
 
 static int
